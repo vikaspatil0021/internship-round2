@@ -6,7 +6,7 @@ const Main = () => {
     const user = localStorage.getItem('user')
     const [posts, setPost] = useState([]);
     const [seed,setSeed] = useState(0);
-    const [updatePostData,setUData] = useState({})
+    const [updatePostData,setUData] = useState({});
     useEffect(() => {
         fetch(process.env.REACT_APP_SERVER_URL + '/posts')
             .then(res => res.json())
@@ -37,13 +37,46 @@ const Main = () => {
 
             })
     }
+
+    const likesUpdate = async(likes,id,index)=>{
+        const element = document.getElementById("like-dislike-" + index);
+        if (element.classList.contains("bi-heart-fill")) {
+            element.classList.replace("bi-heart-fill", "bi-heart");
+            if (likes.length != 0) {
+                var likes = likes.filter((ele)=> {
+                    return ele != user;
+                })
+            }
+        } else {
+            element.classList.replace("bi-heart", "bi-heart-fill");
+            if (!(likes.includes(user))) {
+                likes.push(user);
+            }
+
+        }
+        console.log(likes);
+        await fetch(process.env.REACT_APP_SERVER_URL + '/updateLikes', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token01
+            },
+            body: JSON.stringify({ data: {_id:id,likes:likes}}),
+        }).then(res => res.json())
+            .then(data01 => {
+                console.log(data01);
+                setSeed(Math.random())
+            }).catch(err => {
+                console.log(err);
+            })
+    }
     return (
         <div className='d-flex justify-content-center ' style={{ background: '#f5f5f5' }}>
 
             <div className='my-5' style={{ maxWidth: "450px" }}>
                 <div className='d-flex flex-wrap'>
 
-                    {posts.map((each) => {
+                    {posts.map((each,index) => {
                         return (
                             <div class="card border rounded-0 col-12 p-0 mb-3" >
                                 <div class="card-header border-bottom d-flex justify-content-between bg-white">
@@ -75,11 +108,16 @@ const Main = () => {
                                         {each.title}
                                     </p>
                                     <div className='d-flex align-items-center '>
-                                        <div role='button' className='ps-2'>
-                                            <i class="bi bi-heart fs-4 pe-3"></i>
+                                        <div className='ps-2'>
+                                            <i role='button' id={'like-dislike-' + index} class={(each.likes.includes(user))?"bi bi-heart-fill text-danger fs-4 pe-1":"bi bi-heart text-danger fs-4 pe-1"} onClick={()=>{
+                                                likesUpdate(each.likes,each._id,index);
+                                            }}></i>
+                                            <span className='fs-4 pe-3 '> {each.likes.length}</span>
                                         </div>
                                         <div role='button' className='pb-1 ps-1'>
-                                            <i class="bi bi-chat-dots fs-4 pe-3"></i>
+                                            <i class="bi bi-chat-dots fs-4 pe-1"></i>
+                                            <span className='fs-4 pe-3 '> {each.comment.length}</span>
+
                                         </div>
                                     </div>
                                 </div>
