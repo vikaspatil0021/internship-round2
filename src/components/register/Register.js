@@ -38,7 +38,7 @@ const Register = () => {
                     } else {
                         const toastLiveExample = document.getElementById('liveToast-register')
                         const toast = new bootstrap.Toast(toastLiveExample)
-                        document.querySelector('.toast-body').innerHTML = data.error
+                        document.querySelector('.toast-body').innerHTML = data01.error
                         toast.show()
                     }
                     spinner.classList.add('d-none')
@@ -47,7 +47,7 @@ const Register = () => {
                 .catch(err => {
                     const toastLiveExample = document.getElementById('liveToast-register')
                     const toast = new bootstrap.Toast(toastLiveExample)
-                    document.querySelector('.toast-body').innerHTML = err
+                    document.querySelector('.toast-body').innerHTML = err.message
                     toast.show()
                     spinner.classList.add('d-none')
 
