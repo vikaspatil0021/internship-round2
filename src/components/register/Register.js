@@ -26,11 +26,13 @@ const Register = () => {
                 },
                 body: JSON.stringify(data),
             }).then(res => res.json())
-                .then(data => {
+                .then(data01 => {
 
 
-                    if (data.token) {
-                        localStorage.setItem('Token01', data.token);
+                    if (data01.token) {
+                        localStorage.setItem('Token01', data01.token);
+                        localStorage.setItem('user', data.username);
+
                         window.location.pathname = '/'
 
                     } else {
@@ -116,6 +118,7 @@ const Register = () => {
                     </div>
                 </div>
             </div>
+        
 
         </div>
     )

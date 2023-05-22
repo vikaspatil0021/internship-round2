@@ -9,10 +9,8 @@ import Main from './components/main/Main';
 function App() {
   return (
     <div className="App mt-4 pt-4">
-    <div>
-
+    
       <Header />
-    </div>
       <Router>
         <Routes>
         <Route path="/" exact element={<Main />} />
