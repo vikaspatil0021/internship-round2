@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import UpdatedPost from '../updatePost/UpdatedPost';
 import * as bootstrap from 'bootstrap';
+import Comments from '../Comments/Comments';
 
 const Main = () => {
     const token01 = localStorage.getItem('Token01');
@@ -8,6 +9,8 @@ const Main = () => {
     const [posts, setPost] = useState([]);
     const [seed, setSeed] = useState(0);
     const [updatePostData, setUData] = useState({});
+    const [commentEach, setCommentEach] = useState({comment:[]});
+    console.log(commentEach);
     useEffect(() => {
         fetch(process.env.REACT_APP_SERVER_URL + '/posts')
             .then(res => res.json())
@@ -96,7 +99,7 @@ const Main = () => {
                                             <i class="bi bi-three-dots fs-4"></i>
                                         </div>
                                         <ul class="dropdown-menu">
-                                            <button class="dropdown-item" >View Comments</button>
+                                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#commentModal" onClick={() => setCommentEach(each)}>View Comments</button>
                                             {(each.username === user) ? <>
 
                                                 <hr class="dropdown-divider m-1" />
@@ -121,8 +124,8 @@ const Main = () => {
                                             }}></i>
                                             <span className='fs-4 pe-3 '> {each.likes.length}</span>
                                         </div>
-                                        <div role='button' className='pb-1 ps-1'>
-                                            <i class="bi bi-chat-dots fs-4 pe-1"></i>
+                                        <div  className='pb-1 ps-1'>
+                                            <i role='button' class="bi bi-chat-dots fs-4 pe-1" data-bs-toggle="modal" data-bs-target="#commentModal" onClick={() => setCommentEach(each)}></i>
                                             <span className='fs-4 pe-3 '> {each.comment.length}</span>
 
                                         </div>
@@ -134,6 +137,7 @@ const Main = () => {
                 </div>
             </div>
             <UpdatedPost updatePostData={updatePostData} setSeed={setSeed} />
+            <Comments commentEach={commentEach} setSeed={setSeed} />
             <div class="toast-container position-fixed bottom-0 p-3">
 
                 <div id="liveToast-main" class="toast align-items-center bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
